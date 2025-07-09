@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- index.html --><!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AdBot Earn</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdBot Income</title>
   <style>
     body {
       background: #121212;
@@ -30,10 +29,6 @@
       color: white;
       cursor: pointer;
     }
-    button:disabled {
-      background: #555;
-      cursor: not-allowed;
-    }
     input, select {
       width: 90%;
       margin: 8px auto;
@@ -47,7 +42,6 @@
     .info {
       text-align: center;
       margin-top: 10px;
-      font-size: 17px;
     }
     .withdraw-section {
       background: #292929;
@@ -58,21 +52,14 @@
     }
   </style>
 </head>
-<body>
-
-<h1>🎥 Watch Ads & Earn ৳10</h1>
-<h2>Daily Limit: 15 | Min Withdraw ৳100</h2>
-
-<div class="info">
-  Watched Ads: <span id="watched">0</span> / 15<br />
+<body><h1>🎥 Watch Ads & Earn ৳10</h1>
+<h2>15 Daily | ৳100 Min Withdraw</h2><div class="info">
+  Watched: <span id="watched">0</span> / 15<br />
   Earned: ৳<span id="earned">0.00</span>
-</div>
+</div><button id="watchAdBtn">▶️ Watch Ad</button>
 
-<button id="watchAdBtn">▶️ Watch Ad</button>
-<div class="info" id="timer">✅ প্রস্তুত</div>
-<button id="withdrawToggle">Withdraw</button>
-
-<div class="withdraw-section" id="withdrawSection">
+<div class="info" id="timer">✅ Ready</div>
+<button id="withdrawToggle">Withdraw</button><div class="withdraw-section" id="withdrawSection">
   <h3>Withdraw Request</h3>
   <input type="number" id="withdrawAmount" placeholder="Amount (Min ৳100)" />
   <select id="withdrawMethod">
@@ -82,25 +69,16 @@
   <input type="text" id="withdrawNumber" placeholder="Phone Number" />
   <input type="text" id="telegramUsername" placeholder="Telegram Username (without @)" />
   <button id="submitWithdrawBtn">Submit</button>
-</div>
-
-<!-- Monetag SDK -->
-<script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script>
-  // 🔧 Replace with your own Firebase config
+</div><script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script><script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script><script>
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyAE6iHfwdyBHP3O2MtTWRhJU5wpYWbyyNo",
+    authDomain: "usdt-income.firebaseapp.com",
+    databaseURL: "https://usdt-income.firebaseio.com",
+    projectId: "usdt-income",
+    storageBucket: "usdt-income.appspot.com",
+    messagingSenderId: "195634268437",
+    appId: "1:195634268437:web:a8b4a34e968fc484cf011c",
+    measurementId: "G-K8D5HNRQYY"
   };
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
@@ -126,14 +104,8 @@
 
   const watchBtn = document.getElementById('watchAdBtn');
   const timerEl = document.getElementById('timer');
-
   watchBtn.addEventListener('click', () => {
-    if (!ready) return;
-    if (watched >= dailyLimit) {
-      alert('❌ আজকের জন্য লিমিট শেষ!');
-      return;
-    }
-
+    if (!ready || watched >= dailyLimit) return;
     if (typeof show_9547713 === 'function') {
       show_9547713().then(() => {
         watched++;
@@ -144,11 +116,7 @@
         updateUI();
         startTimer();
         saveUserEarn();
-      }).catch(() => {
-        alert('Ad দেখা যায়নি। আবার চেষ্টা করুন।');
-      });
-    } else {
-      alert('Ad SDK লোড হয়নি। কিছুক্ষণ পর চেষ্টা করুন।');
+      }).catch(() => alert('Ad failed to load.'));
     }
   });
 
@@ -156,21 +124,20 @@
     let sec = 10;
     ready = false;
     watchBtn.disabled = true;
-    timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
+    timerEl.textContent = `Wait ${sec}s`;
     const interval = setInterval(() => {
       sec--;
       if (sec <= 0) {
         clearInterval(interval);
-        timerEl.textContent = '✅ প্রস্তুত';
         ready = true;
         watchBtn.disabled = false;
+        timerEl.textContent = '✅ Ready';
       } else {
-        timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
+        timerEl.textContent = `Wait ${sec}s`;
       }
     }, 1000);
   }
 
-  // Withdraw Toggle
   document.getElementById('withdrawToggle').addEventListener('click', () => {
     const section = document.getElementById('withdrawSection');
     section.style.display = section.style.display === 'block' ? 'none' : 'block';
@@ -181,40 +148,16 @@
     const method = document.getElementById('withdrawMethod').value;
     const number = document.getElementById('withdrawNumber').value.trim();
     const username = document.getElementById('telegramUsername').value.trim();
-
-    if (!amount || amount < 100) {
-      alert('Minimum withdrawal amount ৳100');
-      return;
+    if (!amount || amount < 100 || amount > earned || !number || !username) {
+      alert('Invalid withdraw request'); return;
     }
-    if (amount > earned) {
-      alert('Insufficient balance');
-      return;
-    }
-    if (!number || !username) {
-      alert('সব ফিল্ড পূরণ করুন');
-      return;
-    }
-
     earned -= amount;
     localStorage.setItem('earned', earned.toFixed(2));
     updateUI();
-
-    const data = {
-      amount, method, phone: number, telegramUsername: username,
-      timestamp: new Date().toISOString()
-    };
-
-    db.ref('withdrawRequests').push(data)
-      .then(() => {
-        alert('✅ Withdraw request পাঠানো হয়েছে');
-        document.getElementById('withdrawAmount').value = '';
-        document.getElementById('withdrawNumber').value = '';
-        document.getElementById('telegramUsername').value = '';
-      })
-      .catch(() => alert('❌ সমস্যা হয়েছে। আবার চেষ্টা করুন।'));
+    const data = { amount, method, phone: number, telegramUsername: username, timestamp: new Date().toISOString() };
+    db.ref('withdrawRequests').push(data).then(() => alert('Withdraw request sent!'));
   });
 
-  // Referral ID Save
   function saveUserEarn() {
     let userId = localStorage.getItem('userId');
     if (!userId) {
@@ -222,16 +165,15 @@
       const ref = urlParams.get('start');
       userId = ref ? ref : generateId();
       localStorage.setItem('userId', userId);
+      if (ref) {
+        db.ref('users/' + ref + '/referralCount').transaction(count => (count || 0) + 1);
+        db.ref('users/' + ref + '/earned').transaction(val => (val || 0) + 10);
+      }
     }
-    db.ref('users/' + userId).set({
-      earned, watched,
-      lastUpdated: new Date().toISOString()
-    });
+    db.ref('users/' + userId).set({ earned, watched, lastUpdated: new Date().toISOString() });
   }
-
   function generateId() {
     return 'user-' + Math.random().toString(36).substring(2, 12);
   }
-</script>
-</body>
+</script></body>
 </html>
