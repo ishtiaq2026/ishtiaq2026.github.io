@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+            <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,14 +21,15 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
-        h2{
+        h2 {
             font-size: 15px;
         }
 
-        h1{
+        h1 {
             font-size: 18px;
             font-weight: bold;
         }
+
         .progress-circle {
             width: 100px;
             height: 100px;
@@ -42,6 +43,7 @@
             margin: auto;
             transition: background 0.5s ease-in-out;
         }
+
         button {
             background: #4caf50;
             color: white;
@@ -52,18 +54,22 @@
             cursor: pointer;
             transition: background 0.3s ease;
         }
+
         button:hover {
             background: #388e3c;
         }
+
         .hidden {
             display: none;
         }
+
         .withdraw-section {
             background: #252525;
             padding: 15px;
             border-radius: 10px;
             margin-top: 10px;
         }
+
         input, select {
             width: 90%;
             padding: 10px;
@@ -78,13 +84,13 @@
 <body>
     <div class="container">
         <h1>Ad Watching App</h1>
-        <h2>সর্বনিম্ন উইন্ডো এমাউন্ট ৳150</h2>
+        <h2>সর্বনিম্ন উইন্ডো এমাউন্ট ৳100</h2>
         <div class="progress-circle" id="progress-circle">0%</div>
         <p>Watched Ads: <span id="watched-ads">0</span></p>
         <p>Earned Points: ৳<span id="earned-points">0.00</span></p>
-        
+
         <button id="watch-ad-btn">Watch Ad</button>
-        <button id="join-btn" >Join Now</button>
+        <button id="join-btn">Join Now</button>
         <button id="withdraw-btn">Withdraw</button>
 
         <div id="withdraw-section" class="withdraw-section hidden">
@@ -104,7 +110,19 @@
     <script>
         let watchedAds = parseInt(localStorage.getItem('watchedAds') || 0);
         let earnedPoints = parseFloat(localStorage.getItem('earnedPoints') || 0.00);
-        
+        let lastAdTime = parseInt(localStorage.getItem('lastAdTime') || 0);
+        let lastResetDate = localStorage.getItem('lastResetDate') || "";
+
+        const DAILY_AD_LIMIT = 15;
+        const MIN_TIME_GAP = 10; // seconds
+        const todayDate = new Date().toISOString().split("T")[0];
+
+        if (lastResetDate !== todayDate) {
+            watchedAds = 0;
+            localStorage.setItem('watchedAds', 0);
+            localStorage.setItem('lastResetDate', todayDate);
+        }
+
         document.getElementById('watched-ads').textContent = watchedAds;
         document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
         updateProgressBar();
@@ -113,16 +131,33 @@
         document.getElementById('withdraw-btn').addEventListener('click', toggleWithdraw);
         document.getElementById('submit-withdraw').addEventListener('click', withdrawPoints);
         document.getElementById('join-btn').addEventListener('click', function () {
-                window.location.href = "https://t.me/+ieyJmOyNttQ5ZTRl";
-            });
+            window.location.href = "https://t.me/+ieyJmOyNttQ5ZTRl";
+        });
 
         function watchAd() {
+            const now = Date.now();
+            const timeSinceLast = (now - lastAdTime) / 1000;
+
+            if (watchedAds >= DAILY_AD_LIMIT) {
+                alert("❌ আজকের জন্য আপনার অ্যাড দেখার সীমা শেষ হয়েছে। কাল আবার চেষ্টা করুন।");
+                return;
+            }
+
+            if (timeSinceLast < MIN_TIME_GAP) {
+                alert(`⚠️ অনুগ্রহ করে ${Math.ceil(MIN_TIME_GAP - timeSinceLast)} সেকেন্ড অপেক্ষা করুন।`);
+                return;
+            }
+
             if (typeof show_9547713 === 'function') {
                 show_9547713().then(() => {
                     watchedAds++;
                     earnedPoints += 10;
+                    lastAdTime = now;
+
                     localStorage.setItem('watchedAds', watchedAds);
                     localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
+                    localStorage.setItem('lastAdTime', lastAdTime.toString());
+
                     document.getElementById('watched-ads').textContent = watchedAds;
                     document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
                     updateProgressBar();
@@ -133,9 +168,9 @@
         }
 
         function updateProgressBar() {
-            const progress = (watchedAds % 20) * 5;
+            const progress = Math.min((watchedAds / DAILY_AD_LIMIT) * 100, 100);
             document.getElementById('progress-circle').style.background = `conic-gradient(#4caf50 ${progress}%, #444 ${progress}%)`;
-            document.getElementById('progress-circle').textContent = `${progress}%`;
+            document.getElementById('progress-circle').textContent = `${Math.floor(progress)}%`;
         }
 
         function toggleWithdraw() {
@@ -146,9 +181,15 @@
             const amount = parseFloat(document.getElementById('withdraw-amount').value);
             const method = document.getElementById('payment-method').value;
             const phone = document.getElementById('phone-number').value;
+            const username = document.getElementById('telegram-username').value;
 
-            if (amount < 150 || amount > earnedPoints) {
-                alert('Invalid withdrawal amount.');
+            if (amount < 100 || amount > earnedPoints) {
+                alert('Minimum withdraw amount is 100৳ or you don’t have enough balance.');
+                return;
+            }
+
+            if (!phone || !username) {
+                alert('Please enter phone number and Telegram username.');
                 return;
             }
 
@@ -156,7 +197,7 @@
             localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
             document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
 
-            const message = `Withdrawal Request:\nAmount: ${amount} BDT\nMethod: ${method}\nPhone: ${phone}`;
+            const message = `💸 Withdrawal Request:\nAmount: ${amount} BDT\nMethod: ${method}\nPhone: ${phone}\nTelegram: @${username}`;
             sendTelegramMessage(message);
         }
 
@@ -169,6 +210,8 @@
                 .catch(error => console.error('Error:', error));
         }
     </script>
+
+    <!-- Monetag Ad SDK -->
     <script src='//libtl.com/sdk.js' data-zone='9547713' data-sdk='show_9547713'></script>
 </body>
-  </html>
+</html>
