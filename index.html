@@ -78,7 +78,7 @@
 <body>
     <div class="container">
         <h1>Ad Watching App</h1>
-        <h2>সর্বনিম্ন উইন্ডো এমাউন্ট ৳50</h2>
+        <h2>সর্বনিম্ন উইন্ডো এমাউন্ট ৳150</h2>
         <div class="progress-circle" id="progress-circle">0%</div>
         <p>Watched Ads: <span id="watched-ads">0</span></p>
         <p>Earned Points: ৳<span id="earned-points">0.00</span></p>
@@ -120,7 +120,7 @@
             if (typeof show_9547713 === 'function') {
                 show_9547713().then(() => {
                     watchedAds++;
-                    earnedPoints += 0.02;
+                    earnedPoints += 10;
                     localStorage.setItem('watchedAds', watchedAds);
                     localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
                     document.getElementById('watched-ads').textContent = watchedAds;
@@ -147,7 +147,7 @@
             const method = document.getElementById('payment-method').value;
             const phone = document.getElementById('phone-number').value;
 
-            if (amount < 50 || amount > earnedPoints) {
+            if (amount < 150 || amount > earnedPoints) {
                 alert('Invalid withdrawal amount.');
                 return;
             }
