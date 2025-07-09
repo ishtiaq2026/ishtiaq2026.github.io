@@ -1,217 +1,551 @@
             <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Watching Mini App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: #121212;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #1e1e1e;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-        }
-        h2 {
-            font-size: 15px;
-        }
-
-        h1 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .progress-circle {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: conic-gradient(#4caf50 0%, #444 0%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: bold;
-            margin: auto;
-            transition: background 0.5s ease-in-out;
-        }
-
-        button {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        button:hover {
-            background: #388e3c;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .withdraw-section {
-            background: #252525;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
-
-        input, select {
-            width: 90%;
-            padding: 10px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 5px;
-            background: #333;
-            color: #fff;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AdBot Earn with Firebase & Referral</title>
+<style>
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: Arial, sans-serif;
+    max-width: 420px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #222;
+  }
+  h1, h2 {
+    text-align: center;
+  }
+  button {
+    background: #4caf50;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px auto;
+    display: block;
+    width: 90%;
+    font-size: 18px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+  }
+  button:disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+  input, select {
+    width: 90%;
+    margin: 8px auto;
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #333;
+    color: #eee;
+  }
+  .info {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 17px;
+  }
+  .withdraw-section {
+    background: #292929;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    display: none;
+  }
+  .footer-link {
+    color: #4caf50;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>Ad Watching App</h1>
-        <h2>সর্বনিম্ন উইন্ডো এমাউন্ট ৳100</h2>
-        <div class="progress-circle" id="progress-circle">0%</div>
-        <p>Watched Ads: <span id="watched-ads">0</span></p>
-        <p>Earned Points: ৳<span id="earned-points">0.00</span></p>
 
-        <button id="watch-ad-btn">Watch Ad</button>
-        <button id="join-btn">Join Now</button>
-        <button id="withdraw-btn">Withdraw</button>
+<h1>🎥 Watch Ads & Earn ৳10 Each</h1>
+<h2>Daily Limit: 15 Ads | Minimum Withdraw ৳100</h2>
 
-        <div id="withdraw-section" class="withdraw-section hidden">
-            <h3>Withdraw Funds</h3>
-            <input type="number" id="withdraw-amount" placeholder="Enter Amount">
-            <select id="payment-method">
-                <option value="Manual">Manual</option>
-                <option value="Bkash">Bkash</option>
-                <option value="Nagad">Nagad</option>
-            </select>
-            <input type="text" id="phone-number" placeholder="Enter Your Number">
-            <input type="text" id="telegram-username" placeholder="Your Telegram Username">
-            <button id="submit-withdraw">Submit</button>
-        </div>
-    </div>
+<div class="info">
+  Watched Ads: <span id="watched">0</span> / 15<br />
+  Earned: ৳<span id="earned">0.00</span>
+</div>
 
-    <script>
-        let watchedAds = parseInt(localStorage.getItem('watchedAds') || 0);
-        let earnedPoints = parseFloat(localStorage.getItem('earnedPoints') || 0.00);
-        let lastAdTime = parseInt(localStorage.getItem('lastAdTime') || 0);
-        let lastResetDate = localStorage.getItem('lastResetDate') || "";
+<button id="watchAdBtn">▶️ Watch Ad</button>
 
-        const DAILY_AD_LIMIT = 15;
-        const MIN_TIME_GAP = 10; // seconds
-        const todayDate = new Date().toISOString().split("T")[0];
+<div class="info" id="timer">Ready</div>
 
-        if (lastResetDate !== todayDate) {
-            watchedAds = 0;
-            localStorage.setItem('watchedAds', 0);
-            localStorage.setItem('lastResetDate', todayDate);
-        }
+<button id="withdrawToggle">Withdraw</button>
 
-        document.getElementById('watched-ads').textContent = watchedAds;
-        document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
-        updateProgressBar();
+<div class="withdraw-section" id="withdrawSection">
+  <h3>Withdraw Request</h3>
+  <input type="number" id="withdrawAmount" placeholder="Amount (Minimum ৳100)" />
+  <select id="withdrawMethod">
+    <option value="Bkash">Bkash</option>
+    <option value="Nagad">Nagad</option>
+  </select>
+  <input type="text" id="withdrawNumber" placeholder="Phone Number" />
+  <input type="text" id="telegramUsername" placeholder="Telegram Username (without @)" />
+  <button id="submitWithdrawBtn">Submit Withdraw</button>
+</div>
 
-        document.getElementById('watch-ad-btn').addEventListener('click', watchAd);
-        document.getElementById('withdraw-btn').addEventListener('click', toggleWithdraw);
-        document.getElementById('submit-withdraw').addEventListener('click', withdrawPoints);
-        document.getElementById('join-btn').addEventListener('click', function () {
-            window.location.href = "https://t.me/+ieyJmOyNttQ5ZTRl";
-        });
+<div class="footer-link" id="leaderboardLink">See Leaderboard 🏆</div>
 
-        function watchAd() {
-            const now = Date.now();
-            const timeSinceLast = (now - lastAdTime) / 1000;
+<!-- Monetag SDK -->
+<script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
 
-            if (watchedAds >= DAILY_AD_LIMIT) {
-                alert("❌ আজকের জন্য আপনার অ্যাড দেখার সীমা শেষ হয়েছে। কাল আবার চেষ্টা করুন।");
-                return;
-            }
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
-            if (timeSinceLast < MIN_TIME_GAP) {
-                alert(`⚠️ অনুগ্রহ করে ${Math.ceil(MIN_TIME_GAP - timeSinceLast)} সেকেন্ড অপেক্ষা করুন।`);
-                return;
-            }
+<script>
+  // TODO: Replace these config values with your Firebase project config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-            if (typeof show_9547713 === 'function') {
-                show_9547713().then(() => {
-                    watchedAds++;
-                    earnedPoints += 10;
-                    lastAdTime = now;
+  // Init variables
+  let watched = parseInt(localStorage.getItem('watched')) || 0;
+  let earned = parseFloat(localStorage.getItem('earned')) || 0.00;
+  const dailyLimit = 15;
+  let ready = true;
 
-                    localStorage.setItem('watchedAds', watchedAds);
-                    localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
-                    localStorage.setItem('lastAdTime', lastAdTime.toString());
+  // Reset daily count if new day
+  const todayDate = new Date().toISOString().slice(0,10);
+  const lastDate = localStorage.getItem('lastDate');
+  if (lastDate !== todayDate) {
+    watched = 0;
+    localStorage.setItem('watched', 0);
+    localStorage.setItem('lastDate', todayDate);
+  }
 
-                    document.getElementById('watched-ads').textContent = watchedAds;
-                    document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
-                    updateProgressBar();
-                }).catch(err => console.error("Ad failed to load", err));
-            } else {
-                console.warn("Ad function is not available.");
-            }
-        }
+  // Update UI
+  function updateUI() {
+    document.getElementById('watched').textContent = watched;
+    document.getElementById('earned').textContent = earned.toFixed(2);
+  }
+  updateUI();
 
-        function updateProgressBar() {
-            const progress = Math.min((watchedAds / DAILY_AD_LIMIT) * 100, 100);
-            document.getElementById('progress-circle').style.background = `conic-gradient(#4caf50 ${progress}%, #444 ${progress}%)`;
-            document.getElementById('progress-circle').textContent = `${Math.floor(progress)}%`;
-        }
+  const watchBtn = document.getElementById('watchAdBtn');
+  const timerEl = document.getElementById('timer');
+  const withdrawToggleBtn = document.getElementById('withdrawToggle');
+  const withdrawSection = document.getElementById('withdrawSection');
+  const submitWithdrawBtn = document.getElementById('submitWithdrawBtn');
 
-        function toggleWithdraw() {
-            document.getElementById('withdraw-section').classList.toggle('hidden');
-        }
+  watchBtn.addEventListener('click', () => {
+    if (!ready) return;
+    if (watched >= dailyLimit) {
+      alert('❌ আজকের জন্য লিমিট শেষ! কাল আবার আসুন।');
+      return;
+    }
 
-        function withdrawPoints() {
-            const amount = parseFloat(document.getElementById('withdraw-amount').value);
-            const method = document.getElementById('payment-method').value;
-            const phone = document.getElementById('phone-number').value;
-            const username = document.getElementById('telegram-username').value;
+    if (typeof show_9547713 === 'function') {
+      show_9547713().then(() => {
+        watched++;
+        earned += 10;
+        localStorage.setItem('watched', watched);
+        localStorage.setItem('earned', earned.toFixed(2));
+        localStorage.setItem('lastDate', todayDate);
+        updateUI();
+        startTimer();
+        saveUserEarn();
+      }).catch(() => {
+        alert('Ad দেখাতে সমস্যা হচ্ছে। আবার চেষ্টা করুন।');
+      });
+    } else {
+      alert('Ad লোড হয়নি। কিছুক্ষণ অপেক্ষা করুন।');
+    }
+  });
 
-            if (amount < 100 || amount > earnedPoints) {
-                alert('Minimum withdraw amount is 100৳ or you don’t have enough balance.');
-                return;
-            }
+  function startTimer() {
+    let sec = 10;
+    ready = false;
+    watchBtn.disabled = true;
+    timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
+    const interval = setInterval(() => {
+      sec--;
+      if (sec <= 0) {
+        clearInterval(interval);
+        timerEl.textContent = '✅ প্রস্তুত';
+        ready = true;
+        watchBtn.disabled = false;
+      } else {
+        timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
+      }
+    }, 1000);
+  }
 
-            if (!phone || !username) {
-                alert('Please enter phone number and Telegram username.');
-                return;
-            }
+  // Withdraw Toggle
+  withdrawToggleBtn.addEventListener('click', () => {
+    if (withdrawSection.style.display === 'block') {
+      withdrawSection.style.display = 'none';
+    } else {
+      withdrawSection.style.display = 'block';
+    }
+  });
 
-            earnedPoints -= amount;
-            localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
-            document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+  // Withdraw Submit
+  submitWithdrawBtn.addEventListener('click', () => {
+    const amount = parseFloat(document.getElementById('withdrawAmount').value);
+    const method = document.getElementById('withdrawMethod').value;
+    const number = document.getElementById('withdrawNumber').value.trim();
+    const username = document.getElementById('telegramUsername').value.trim();
 
-            const message = `💸 Withdrawal Request:\nAmount: ${amount} BDT\nMethod: ${method}\nPhone: ${phone}\nTelegram: @${username}`;
-            sendTelegramMessage(message);
-        }
+    if (!amount || amount < 100) {
+      alert('Minimum withdrawal amount ৳100');
+      return;
+    }
+    if (amount > earned) {
+      alert('Insufficient balance');
+      return;
+    }
+    if (!number || !username) {
+      alert('Phone number এবং Telegram username দিতে হবে');
+      return;
+    }
 
-        function sendTelegramMessage(msg) {
-            const botToken = "8087668584:AAFr1OHDOWQgGPUKXVM-St-4FPC_dcMXANw";
-            const chatId = "7315121897";
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`)
-                .then(response => response.json())
-                .then(data => console.log('Message sent to admin'))
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
+    // Deduct balance
+    earned -= amount;
+    localStorage.setItem('earned', earned.toFixed(2));
+    updateUI();
 
-    <!-- Monetag Ad SDK -->
-    <script src='//libtl.com/sdk.js' data-zone='9547713' data-sdk='show_9547713'></script>
+    // Prepare withdraw data
+    const withdrawData = {
+      amount: amount,
+      method: method,
+      phone: number,
+      telegramUsername: username,
+      timestamp: new Date().toISOString()
+    };
+
+    // Save withdraw to Firebase
+    db.ref('withdrawRequests').push(withdrawData)
+      .then(() => {
+        alert('Withdraw request পাঠানো হয়েছে। দ্রুত প্রক্রিয়া করা হবে।');
+        // Clear form
+        document.getElementById('withdrawAmount').value = '';
+        document.getElementById('withdrawNumber').value = '';
+        document.getElementById('telegramUsername').value = '';
+      })
+      .catch(() => alert('Withdraw request পাঠাতে সমস্যা হয়েছে।'));
+
+  });
+
+  // Save user earn to Firebase for leaderboard & referral
+  function saveUserEarn() {
+    // Get or create userId from localStorage or URL referral param
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+      // Try to get from URL param start (Telegram Bot referral)
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('start');
+      userId = ref ? ref : generateId();
+      localStorage.setItem('userId', userId);
+    }
+    // Save earn data in firebase for leaderboard
+    db.ref('users/' + userId).set({
+      earned: earned,
+      watched: watched,
+      lastUpdated: new Date().toISOString()
+    });
+  }
+
+  // Simple ID generator for user if no referral
+  function generateId() {
+    return 'user-' + Math.random().toString(36).substring(2, 12);
+  }
+
+  // Leaderboard link click
+  document.getElementById('leaderboardLink').addEventListener('click', () => {
+    window.location.href = 'leaderboard.html';
+  });
+
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AdBot Earn with Firebase & Referral</title>
+<style>
+  body {
+    background: #121212;
+    color: #eee;
+    font-family: Arial, sans-serif;
+    max-width: 420px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #222;
+  }
+  h1, h2 {
+    text-align: center;
+  }
+  button {
+    background: #4caf50;
+    border: none;
+    padding: 12px 20px;
+    margin: 10px auto;
+    display: block;
+    width: 90%;
+    font-size: 18px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+  }
+  button:disabled {
+    background: #555;
+    cursor: not-allowed;
+  }
+  input, select {
+    width: 90%;
+    margin: 8px auto;
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #333;
+    color: #eee;
+  }
+  .info {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 17px;
+  }
+  .withdraw-section {
+    background: #292929;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    display: none;
+  }
+  .footer-link {
+    color: #4caf50;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<h1>🎥 Watch Ads & Earn ৳10 Each</h1>
+<h2>Daily Limit: 15 Ads | Minimum Withdraw ৳100</h2>
+
+<div class="info">
+  Watched Ads: <span id="watched">0</span> / 15<br />
+  Earned: ৳<span id="earned">0.00</span>
+</div>
+
+<button id="watchAdBtn">▶️ Watch Ad</button>
+
+<div class="info" id="timer">Ready</div>
+
+<button id="withdrawToggle">Withdraw</button>
+
+<div class="withdraw-section" id="withdrawSection">
+  <h3>Withdraw Request</h3>
+  <input type="number" id="withdrawAmount" placeholder="Amount (Minimum ৳100)" />
+  <select id="withdrawMethod">
+    <option value="Bkash">Bkash</option>
+    <option value="Nagad">Nagad</option>
+  </select>
+  <input type="text" id="withdrawNumber" placeholder="Phone Number" />
+  <input type="text" id="telegramUsername" placeholder="Telegram Username (without @)" />
+  <button id="submitWithdrawBtn">Submit Withdraw</button>
+</div>
+
+<div class="footer-link" id="leaderboardLink">See Leaderboard 🏆</div>
+
+<!-- Monetag SDK -->
+<script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+<script>
+  // TODO: Replace these config values with your Firebase project config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  // Init variables
+  let watched = parseInt(localStorage.getItem('watched')) || 0;
+  let earned = parseFloat(localStorage.getItem('earned')) || 0.00;
+  const dailyLimit = 15;
+  let ready = true;
+
+  // Reset daily count if new day
+  const todayDate = new Date().toISOString().slice(0,10);
+  const lastDate = localStorage.getItem('lastDate');
+  if (lastDate !== todayDate) {
+    watched = 0;
+    localStorage.setItem('watched', 0);
+    localStorage.setItem('lastDate', todayDate);
+  }
+
+  // Update UI
+  function updateUI() {
+    document.getElementById('watched').textContent = watched;
+    document.getElementById('earned').textContent = earned.toFixed(2);
+  }
+  updateUI();
+
+  const watchBtn = document.getElementById('watchAdBtn');
+  const timerEl = document.getElementById('timer');
+  const withdrawToggleBtn = document.getElementById('withdrawToggle');
+  const withdrawSection = document.getElementById('withdrawSection');
+  const submitWithdrawBtn = document.getElementById('submitWithdrawBtn');
+
+  watchBtn.addEventListener('click', () => {
+    if (!ready) return;
+    if (watched >= dailyLimit) {
+      alert('❌ আজকের জন্য লিমিট শেষ! কাল আবার আসুন।');
+      return;
+    }
+
+    if (typeof show_9547713 === 'function') {
+      show_9547713().then(() => {
+        watched++;
+        earned += 10;
+        localStorage.setItem('watched', watched);
+        localStorage.setItem('earned', earned.toFixed(2));
+        localStorage.setItem('lastDate', todayDate);
+        updateUI();
+        startTimer();
+        saveUserEarn();
+      }).catch(() => {
+        alert('Ad দেখাতে সমস্যা হচ্ছে। আবার চেষ্টা করুন।');
+      });
+    } else {
+      alert('Ad লোড হয়নি। কিছুক্ষণ অপেক্ষা করুন।');
+    }
+  });
+
+  function startTimer() {
+    let sec = 10;
+    ready = false;
+    watchBtn.disabled = true;
+    timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
+    const interval = setInterval(() => {
+      sec--;
+      if (sec <= 0) {
+        clearInterval(interval);
+        timerEl.textContent = '✅ প্রস্তুত';
+        ready = true;
+        watchBtn.disabled = false;
+      } else {
+        timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
+      }
+    }, 1000);
+  }
+
+  // Withdraw Toggle
+  withdrawToggleBtn.addEventListener('click', () => {
+    if (withdrawSection.style.display === 'block') {
+      withdrawSection.style.display = 'none';
+    } else {
+      withdrawSection.style.display = 'block';
+    }
+  });
+
+  // Withdraw Submit
+  submitWithdrawBtn.addEventListener('click', () => {
+    const amount = parseFloat(document.getElementById('withdrawAmount').value);
+    const method = document.getElementById('withdrawMethod').value;
+    const number = document.getElementById('withdrawNumber').value.trim();
+    const username = document.getElementById('telegramUsername').value.trim();
+
+    if (!amount || amount < 100) {
+      alert('Minimum withdrawal amount ৳100');
+      return;
+    }
+    if (amount > earned) {
+      alert('Insufficient balance');
+      return;
+    }
+    if (!number || !username) {
+      alert('Phone number এবং Telegram username দিতে হবে');
+      return;
+    }
+
+    // Deduct balance
+    earned -= amount;
+    localStorage.setItem('earned', earned.toFixed(2));
+    updateUI();
+
+    // Prepare withdraw data
+    const withdrawData = {
+      amount: amount,
+      method: method,
+      phone: number,
+      telegramUsername: username,
+      timestamp: new Date().toISOString()
+    };
+
+    // Save withdraw to Firebase
+    db.ref('withdrawRequests').push(withdrawData)
+      .then(() => {
+        alert('Withdraw request পাঠানো হয়েছে। দ্রুত প্রক্রিয়া করা হবে।');
+        // Clear form
+        document.getElementById('withdrawAmount').value = '';
+        document.getElementById('withdrawNumber').value = '';
+        document.getElementById('telegramUsername').value = '';
+      })
+      .catch(() => alert('Withdraw request পাঠাতে সমস্যা হয়েছে।'));
+
+  });
+
+  // Save user earn to Firebase for leaderboard & referral
+  function saveUserEarn() {
+    // Get or create userId from localStorage or URL referral param
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+      // Try to get from URL param start (Telegram Bot referral)
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('start');
+      userId = ref ? ref : generateId();
+      localStorage.setItem('userId', userId);
+    }
+    // Save earn data in firebase for leaderboard
+    db.ref('users/' + userId).set({
+      earned: earned,
+      watched: watched,
+      lastUpdated: new Date().toISOString()
+    });
+  }
+
+  // Simple ID generator for user if no referral
+  function generateId() {
+    return 'user-' + Math.random().toString(36).substring(2, 12);
+  }
+
+  // Leaderboard link click
+  document.getElementById('leaderboardLink').addEventListener('click', () => {
+    window.location.href = 'leaderboard.html';
+  });
+
+</script>
 </body>
 </html>
