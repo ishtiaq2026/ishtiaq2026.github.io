@@ -1,73 +1,67 @@
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AdBot Earn with Firebase & Referral</title>
-<style>
-  body {
-    background: #121212;
-    color: #eee;
-    font-family: Arial, sans-serif;
-    max-width: 420px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px #222;
-  }
-  h1, h2 {
-    text-align: center;
-  }
-  button {
-    background: #4caf50;
-    border: none;
-    padding: 12px 20px;
-    margin: 10px auto;
-    display: block;
-    width: 90%;
-    font-size: 18px;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-  }
-  button:disabled {
-    background: #555;
-    cursor: not-allowed;
-  }
-  input, select {
-    width: 90%;
-    margin: 8px auto;
-    display: block;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #333;
-    color: #eee;
-  }
-  .info {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 17px;
-  }
-  .withdraw-section {
-    background: #292929;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 20px;
-    display: none;
-  }
-  .footer-link {
-    color: #4caf50;
-    text-align: center;
-    margin-top: 15px;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AdBot Earn</title>
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      max-width: 420px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #222;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    button {
+      background: #4caf50;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px auto;
+      display: block;
+      width: 90%;
+      font-size: 18px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+    }
+    input, select {
+      width: 90%;
+      margin: 8px auto;
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #333;
+      color: #eee;
+    }
+    .info {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 17px;
+    }
+    .withdraw-section {
+      background: #292929;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<h1>🎥 Watch Ads & Earn ৳10 Each</h1>
-<h2>Daily Limit: 15 Ads | Minimum Withdraw ৳100</h2>
+<h1>🎥 Watch Ads & Earn ৳10</h1>
+<h2>Daily Limit: 15 | Min Withdraw ৳100</h2>
 
 <div class="info">
   Watched Ads: <span id="watched">0</span> / 15<br />
@@ -75,24 +69,20 @@
 </div>
 
 <button id="watchAdBtn">▶️ Watch Ad</button>
-
-<div class="info" id="timer">Ready</div>
-
+<div class="info" id="timer">✅ প্রস্তুত</div>
 <button id="withdrawToggle">Withdraw</button>
 
 <div class="withdraw-section" id="withdrawSection">
   <h3>Withdraw Request</h3>
-  <input type="number" id="withdrawAmount" placeholder="Amount (Minimum ৳100)" />
+  <input type="number" id="withdrawAmount" placeholder="Amount (Min ৳100)" />
   <select id="withdrawMethod">
     <option value="Bkash">Bkash</option>
     <option value="Nagad">Nagad</option>
   </select>
   <input type="text" id="withdrawNumber" placeholder="Phone Number" />
   <input type="text" id="telegramUsername" placeholder="Telegram Username (without @)" />
-  <button id="submitWithdrawBtn">Submit Withdraw</button>
+  <button id="submitWithdrawBtn">Submit</button>
 </div>
-
-<div class="footer-link" id="leaderboardLink">See Leaderboard 🏆</div>
 
 <!-- Monetag SDK -->
 <script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
@@ -102,7 +92,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <script>
-  // TODO: Replace these config values with your Firebase project config
+  // 🔧 Replace with your own Firebase config
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -115,13 +105,11 @@
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // Init variables
   let watched = parseInt(localStorage.getItem('watched')) || 0;
   let earned = parseFloat(localStorage.getItem('earned')) || 0.00;
   const dailyLimit = 15;
   let ready = true;
 
-  // Reset daily count if new day
   const todayDate = new Date().toISOString().slice(0,10);
   const lastDate = localStorage.getItem('lastDate');
   if (lastDate !== todayDate) {
@@ -130,7 +118,6 @@
     localStorage.setItem('lastDate', todayDate);
   }
 
-  // Update UI
   function updateUI() {
     document.getElementById('watched').textContent = watched;
     document.getElementById('earned').textContent = earned.toFixed(2);
@@ -139,14 +126,11 @@
 
   const watchBtn = document.getElementById('watchAdBtn');
   const timerEl = document.getElementById('timer');
-  const withdrawToggleBtn = document.getElementById('withdrawToggle');
-  const withdrawSection = document.getElementById('withdrawSection');
-  const submitWithdrawBtn = document.getElementById('submitWithdrawBtn');
 
   watchBtn.addEventListener('click', () => {
     if (!ready) return;
     if (watched >= dailyLimit) {
-      alert('❌ আজকের জন্য লিমিট শেষ! কাল আবার আসুন।');
+      alert('❌ আজকের জন্য লিমিট শেষ!');
       return;
     }
 
@@ -161,10 +145,10 @@
         startTimer();
         saveUserEarn();
       }).catch(() => {
-        alert('Ad দেখাতে সমস্যা হচ্ছে। আবার চেষ্টা করুন।');
+        alert('Ad দেখা যায়নি। আবার চেষ্টা করুন।');
       });
     } else {
-      alert('Ad লোড হয়নি। কিছুক্ষণ অপেক্ষা করুন।');
+      alert('Ad SDK লোড হয়নি। কিছুক্ষণ পর চেষ্টা করুন।');
     }
   });
 
@@ -187,16 +171,12 @@
   }
 
   // Withdraw Toggle
-  withdrawToggleBtn.addEventListener('click', () => {
-    if (withdrawSection.style.display === 'block') {
-      withdrawSection.style.display = 'none';
-    } else {
-      withdrawSection.style.display = 'block';
-    }
+  document.getElementById('withdrawToggle').addEventListener('click', () => {
+    const section = document.getElementById('withdrawSection');
+    section.style.display = section.style.display === 'block' ? 'none' : 'block';
   });
 
-  // Withdraw Submit
-  submitWithdrawBtn.addEventListener('click', () => {
+  document.getElementById('submitWithdrawBtn').addEventListener('click', () => {
     const amount = parseFloat(document.getElementById('withdrawAmount').value);
     const method = document.getElementById('withdrawMethod').value;
     const number = document.getElementById('withdrawNumber').value.trim();
@@ -211,341 +191,47 @@
       return;
     }
     if (!number || !username) {
-      alert('Phone number এবং Telegram username দিতে হবে');
+      alert('সব ফিল্ড পূরণ করুন');
       return;
     }
 
-    // Deduct balance
     earned -= amount;
     localStorage.setItem('earned', earned.toFixed(2));
     updateUI();
 
-    // Prepare withdraw data
-    const withdrawData = {
-      amount: amount,
-      method: method,
-      phone: number,
-      telegramUsername: username,
+    const data = {
+      amount, method, phone: number, telegramUsername: username,
       timestamp: new Date().toISOString()
     };
 
-    // Save withdraw to Firebase
-    db.ref('withdrawRequests').push(withdrawData)
+    db.ref('withdrawRequests').push(data)
       .then(() => {
-        alert('Withdraw request পাঠানো হয়েছে। দ্রুত প্রক্রিয়া করা হবে।');
-        // Clear form
+        alert('✅ Withdraw request পাঠানো হয়েছে');
         document.getElementById('withdrawAmount').value = '';
         document.getElementById('withdrawNumber').value = '';
         document.getElementById('telegramUsername').value = '';
       })
-      .catch(() => alert('Withdraw request পাঠাতে সমস্যা হয়েছে।'));
-
+      .catch(() => alert('❌ সমস্যা হয়েছে। আবার চেষ্টা করুন।'));
   });
 
-  // Save user earn to Firebase for leaderboard & referral
+  // Referral ID Save
   function saveUserEarn() {
-    // Get or create userId from localStorage or URL referral param
     let userId = localStorage.getItem('userId');
     if (!userId) {
-      // Try to get from URL param start (Telegram Bot referral)
       const urlParams = new URLSearchParams(window.location.search);
       const ref = urlParams.get('start');
       userId = ref ? ref : generateId();
       localStorage.setItem('userId', userId);
     }
-    // Save earn data in firebase for leaderboard
     db.ref('users/' + userId).set({
-      earned: earned,
-      watched: watched,
+      earned, watched,
       lastUpdated: new Date().toISOString()
     });
   }
 
-  // Simple ID generator for user if no referral
   function generateId() {
     return 'user-' + Math.random().toString(36).substring(2, 12);
   }
-
-  // Leaderboard link click
-  document.getElementById('leaderboardLink').addEventListener('click', () => {
-    window.location.href = 'leaderboard.html';
-  });
-
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AdBot Earn with Firebase & Referral</title>
-<style>
-  body {
-    background: #121212;
-    color: #eee;
-    font-family: Arial, sans-serif;
-    max-width: 420px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 15px #222;
-  }
-  h1, h2 {
-    text-align: center;
-  }
-  button {
-    background: #4caf50;
-    border: none;
-    padding: 12px 20px;
-    margin: 10px auto;
-    display: block;
-    width: 90%;
-    font-size: 18px;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-  }
-  button:disabled {
-    background: #555;
-    cursor: not-allowed;
-  }
-  input, select {
-    width: 90%;
-    margin: 8px auto;
-    display: block;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #333;
-    color: #eee;
-  }
-  .info {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 17px;
-  }
-  .withdraw-section {
-    background: #292929;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 20px;
-    display: none;
-  }
-  .footer-link {
-    color: #4caf50;
-    text-align: center;
-    margin-top: 15px;
-    cursor: pointer;
-  }
-</style>
-</head>
-<body>
-
-<h1>🎥 Watch Ads & Earn ৳10 Each</h1>
-<h2>Daily Limit: 15 Ads | Minimum Withdraw ৳100</h2>
-
-<div class="info">
-  Watched Ads: <span id="watched">0</span> / 15<br />
-  Earned: ৳<span id="earned">0.00</span>
-</div>
-
-<button id="watchAdBtn">▶️ Watch Ad</button>
-
-<div class="info" id="timer">Ready</div>
-
-<button id="withdrawToggle">Withdraw</button>
-
-<div class="withdraw-section" id="withdrawSection">
-  <h3>Withdraw Request</h3>
-  <input type="number" id="withdrawAmount" placeholder="Amount (Minimum ৳100)" />
-  <select id="withdrawMethod">
-    <option value="Bkash">Bkash</option>
-    <option value="Nagad">Nagad</option>
-  </select>
-  <input type="text" id="withdrawNumber" placeholder="Phone Number" />
-  <input type="text" id="telegramUsername" placeholder="Telegram Username (without @)" />
-  <button id="submitWithdrawBtn">Submit Withdraw</button>
-</div>
-
-<div class="footer-link" id="leaderboardLink">See Leaderboard 🏆</div>
-
-<!-- Monetag SDK -->
-<script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script>
-  // TODO: Replace these config values with your Firebase project config
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-
-  // Init variables
-  let watched = parseInt(localStorage.getItem('watched')) || 0;
-  let earned = parseFloat(localStorage.getItem('earned')) || 0.00;
-  const dailyLimit = 15;
-  let ready = true;
-
-  // Reset daily count if new day
-  const todayDate = new Date().toISOString().slice(0,10);
-  const lastDate = localStorage.getItem('lastDate');
-  if (lastDate !== todayDate) {
-    watched = 0;
-    localStorage.setItem('watched', 0);
-    localStorage.setItem('lastDate', todayDate);
-  }
-
-  // Update UI
-  function updateUI() {
-    document.getElementById('watched').textContent = watched;
-    document.getElementById('earned').textContent = earned.toFixed(2);
-  }
-  updateUI();
-
-  const watchBtn = document.getElementById('watchAdBtn');
-  const timerEl = document.getElementById('timer');
-  const withdrawToggleBtn = document.getElementById('withdrawToggle');
-  const withdrawSection = document.getElementById('withdrawSection');
-  const submitWithdrawBtn = document.getElementById('submitWithdrawBtn');
-
-  watchBtn.addEventListener('click', () => {
-    if (!ready) return;
-    if (watched >= dailyLimit) {
-      alert('❌ আজকের জন্য লিমিট শেষ! কাল আবার আসুন।');
-      return;
-    }
-
-    if (typeof show_9547713 === 'function') {
-      show_9547713().then(() => {
-        watched++;
-        earned += 10;
-        localStorage.setItem('watched', watched);
-        localStorage.setItem('earned', earned.toFixed(2));
-        localStorage.setItem('lastDate', todayDate);
-        updateUI();
-        startTimer();
-        saveUserEarn();
-      }).catch(() => {
-        alert('Ad দেখাতে সমস্যা হচ্ছে। আবার চেষ্টা করুন।');
-      });
-    } else {
-      alert('Ad লোড হয়নি। কিছুক্ষণ অপেক্ষা করুন।');
-    }
-  });
-
-  function startTimer() {
-    let sec = 10;
-    ready = false;
-    watchBtn.disabled = true;
-    timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
-    const interval = setInterval(() => {
-      sec--;
-      if (sec <= 0) {
-        clearInterval(interval);
-        timerEl.textContent = '✅ প্রস্তুত';
-        ready = true;
-        watchBtn.disabled = false;
-      } else {
-        timerEl.textContent = `⏱️ অপেক্ষা করুন ${sec} সেকেন্ড`;
-      }
-    }, 1000);
-  }
-
-  // Withdraw Toggle
-  withdrawToggleBtn.addEventListener('click', () => {
-    if (withdrawSection.style.display === 'block') {
-      withdrawSection.style.display = 'none';
-    } else {
-      withdrawSection.style.display = 'block';
-    }
-  });
-
-  // Withdraw Submit
-  submitWithdrawBtn.addEventListener('click', () => {
-    const amount = parseFloat(document.getElementById('withdrawAmount').value);
-    const method = document.getElementById('withdrawMethod').value;
-    const number = document.getElementById('withdrawNumber').value.trim();
-    const username = document.getElementById('telegramUsername').value.trim();
-
-    if (!amount || amount < 100) {
-      alert('Minimum withdrawal amount ৳100');
-      return;
-    }
-    if (amount > earned) {
-      alert('Insufficient balance');
-      return;
-    }
-    if (!number || !username) {
-      alert('Phone number এবং Telegram username দিতে হবে');
-      return;
-    }
-
-    // Deduct balance
-    earned -= amount;
-    localStorage.setItem('earned', earned.toFixed(2));
-    updateUI();
-
-    // Prepare withdraw data
-    const withdrawData = {
-      amount: amount,
-      method: method,
-      phone: number,
-      telegramUsername: username,
-      timestamp: new Date().toISOString()
-    };
-
-    // Save withdraw to Firebase
-    db.ref('withdrawRequests').push(withdrawData)
-      .then(() => {
-        alert('Withdraw request পাঠানো হয়েছে। দ্রুত প্রক্রিয়া করা হবে।');
-        // Clear form
-        document.getElementById('withdrawAmount').value = '';
-        document.getElementById('withdrawNumber').value = '';
-        document.getElementById('telegramUsername').value = '';
-      })
-      .catch(() => alert('Withdraw request পাঠাতে সমস্যা হয়েছে।'));
-
-  });
-
-  // Save user earn to Firebase for leaderboard & referral
-  function saveUserEarn() {
-    // Get or create userId from localStorage or URL referral param
-    let userId = localStorage.getItem('userId');
-    if (!userId) {
-      // Try to get from URL param start (Telegram Bot referral)
-      const urlParams = new URLSearchParams(window.location.search);
-      const ref = urlParams.get('start');
-      userId = ref ? ref : generateId();
-      localStorage.setItem('userId', userId);
-    }
-    // Save earn data in firebase for leaderboard
-    db.ref('users/' + userId).set({
-      earned: earned,
-      watched: watched,
-      lastUpdated: new Date().toISOString()
-    });
-  }
-
-  // Simple ID generator for user if no referral
-  function generateId() {
-    return 'user-' + Math.random().toString(36).substring(2, 12);
-  }
-
-  // Leaderboard link click
-  document.getElementById('leaderboardLink').addEventListener('click', () => {
-    window.location.href = 'leaderboard.html';
-  });
-
 </script>
 </body>
 </html>
