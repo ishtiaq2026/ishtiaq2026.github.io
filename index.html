@@ -1,167 +1,157 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reward Hub</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reward App</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      padding: 0;
       background: #121212;
+      font-family: Arial, sans-serif;
       color: #fff;
     }
-    header {
-      display: flex;
-      justify-content: space-around;
-      padding: 15px;
-      background: #1e1e1e;
-      box-shadow: 0 0 5px #000;
-    }
-    header button {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    section {
-      display: none;
+    .container {
       padding: 20px;
+      max-width: 420px;
+      margin: auto;
     }
-    section.active {
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
       display: block;
     }
-    .btn {
-      background: #4caf50;
-      border: none;
-      padding: 12px;
-      border-radius: 8px;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 15px;
+    h1, h2 {
+      text-align: center;
     }
-    input, select {
+    button {
       width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 5px;
+      padding: 12px;
       border: none;
-      background: #333;
+      border-radius: 8px;
+      font-size: 18px;
+      background-color: #4caf50;
       color: white;
+      margin-top: 10px;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: space-around;
+      background: #1e1e1e;
+      padding: 8px 0;
+      border-top: 1px solid #333;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: #bbb;
+      font-size: 14px;
+      flex: 1;
+    }
+    .bottom-nav button.active {
+      color: #4caf50;
     }
   </style>
 </head>
-<body><header>
-  <button onclick="showTab('earn')">🏆 Earn</button>
-  <button onclick="showTab('redeem')">💳 Redeem</button>
-  <button onclick="showTab('history')">📜 History</button>
-  <button onclick="showTab('profile')">👤 Profile</button>
-</header><!-- Earn Section --><section id="earn" class="active">
-  <h2>Watch Ads & Earn Points</h2>
-  <p>Watched: <span id="watched">0</span></p>
-  <p>Points: <span id="points">0</span></p>
-  <button class="btn" id="watchAdBtn">▶️ Watch Ad</button>
-  <p id="timer">✅ Ready</p>
-</section><!-- Redeem Section --><section id="redeem">
-  <h2>Redeem Points</h2>
-  <p>500 Points = 50৳ | 1000 Points = 100৳</p>
-  <input type="number" id="redeemPoints" placeholder="Enter points (500 or 1000)" />
-  <select id="redeemMethod">
-    <option value="Bkash">Bkash</option>
-    <option value="Nagad">Nagad</option>
-    <option value="Rocket">Rocket</option>
-  </select>
-  <input type="text" id="redeemNumber" placeholder="Phone Number" />
-  <button class="btn" onclick="submitRedeem()">Submit Request</button>
-</section><!-- History Section --><section id="history">
-  <h2>History</h2>
-  <p>Total Ads Watched: <span id="totalWatched">0</span></p>
-  <p>Total Redeems: <span id="totalRedeems">0</span></p>
-</section><!-- Profile Section --><section id="profile">
-  <h2>Your Profile</h2>
-  <input type="text" id="telegramUser" placeholder="Telegram Username (without @)" />
-  <button class="btn" onclick="saveUsername()">Save</button>
-  <p id="savedUser"></p>
-</section><!-- Ad Script --><script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script><script>
-  let watched = parseInt(localStorage.getItem('watched') || '0');
-  let points = parseInt(localStorage.getItem('points') || '0');
-  let redeems = parseInt(localStorage.getItem('redeems') || '0');
-  let ready = true;
+<body>
+  <div class="container">
+    <!-- Earn Tab -->
+    <div id="earnTab" class="tab-content active">
+      <h1>🎥 Watch Ads & Earn</h1>
+      <h2>+5 Points per Ad</h2>
+      <p style="text-align:center;">Watched: <span id="watched">0</span><br>Points: <span id="points">0</span></p>
+      <button onclick="watchAd()">▶️ Watch Ad</button>
+      <div style="text-align:center;" id="timer">✅ Ready</div>
+    </div>
 
-  function updateUI() {
-    document.getElementById('watched').textContent = watched;
-    document.getElementById('points').textContent = points;
-    document.getElementById('totalWatched').textContent = watched;
-    document.getElementById('totalRedeems').textContent = redeems;
-    document.getElementById('savedUser').textContent = 'Username: ' + (localStorage.getItem('tgUser') || 'Not set');
-  }
-  updateUI();
+    <!-- Redeem Tab -->
+    <div id="redeemTab" class="tab-content">
+      <h2>🎁 Redeem</h2>
+      <p style="text-align:center;">500 Points = ৳50<br>1000 Points = ৳100</p>
+      <button>Withdraw via Bkash</button>
+      <button>Withdraw via Nagad</button>
+      <button>Withdraw via Rocket</button>
+    </div>
 
-  document.getElementById('watchAdBtn').addEventListener('click', () => {
-    if (!ready) return;
-    if (typeof show_9547713 === 'function') {
-      show_9547713().then(() => {
-        watched++;
-        points += 5;
-        localStorage.setItem('watched', watched);
-        localStorage.setItem('points', points);
-        updateUI();
-        startTimer();
-      }).catch(() => alert('Ad failed to load'));
+    <!-- History Tab -->
+    <div id="historyTab" class="tab-content">
+      <h2>📜 History</h2>
+      <p style="text-align:center;">No history available</p>
+    </div>
+
+    <!-- Profile Tab -->
+    <div id="profileTab" class="tab-content">
+      <h2>👤 Profile</h2>
+      <p style="text-align:center;">Username: <strong>@yourname</strong><br>ID: user-12345</p>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="active" onclick="switchTab('earnTab', this)">Earn</button>
+    <button onclick="switchTab('redeemTab', this)">Redeem</button>
+    <button onclick="switchTab('historyTab', this)">History</button>
+    <button onclick="switchTab('profileTab', this)">Profile</button>
+  </div>
+
+  <!-- Ad Script -->
+  <script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
+
+  <script>
+    let watched = parseInt(localStorage.getItem('watched')) || 0;
+    let points = parseInt(localStorage.getItem('points')) || 0;
+    let ready = true;
+
+    function updateUI() {
+      document.getElementById("watched").textContent = watched;
+      document.getElementById("points").textContent = points;
     }
-  });
 
-  function startTimer() {
-    let sec = 10;
-    ready = false;
-    document.getElementById('watchAdBtn').disabled = true;
-    document.getElementById('timer').textContent = `Wait ${sec}s`;
-    let interval = setInterval(() => {
-      sec--;
-      document.getElementById('timer').textContent = `Wait ${sec}s`;
-      if (sec <= 0) {
-        clearInterval(interval);
-        ready = true;
-        document.getElementById('watchAdBtn').disabled = false;
-        document.getElementById('timer').textContent = '✅ Ready';
+    function watchAd() {
+      if (!ready) return;
+      if (typeof show_9547713 === 'function') {
+        show_9547713().then(() => {
+          watched++;
+          points += 5;
+          localStorage.setItem("watched", watched);
+          localStorage.setItem("points", points);
+          updateUI();
+          startTimer();
+        }).catch(() => alert("Ad failed to load."));
       }
-    }, 1000);
-  }
-
-  function submitRedeem() {
-    const pts = parseInt(document.getElementById('redeemPoints').value);
-    const number = document.getElementById('redeemNumber').value;
-    const method = document.getElementById('redeemMethod').value;
-    const tgUser = localStorage.getItem('tgUser') || '';
-
-    if (![500, 1000].includes(pts) || points < pts || !number || !tgUser) {
-      alert("Invalid redeem request");
-      return;
     }
 
-    points -= pts;
-    redeems++;
-    localStorage.setItem('points', points);
-    localStorage.setItem('redeems', redeems);
+    function startTimer() {
+      let sec = 10;
+      ready = false;
+      const timerEl = document.getElementById("timer");
+      const interval = setInterval(() => {
+        timerEl.textContent = `Wait ${sec}s`;
+        sec--;
+        if (sec < 0) {
+          clearInterval(interval);
+          timerEl.textContent = "✅ Ready";
+          ready = true;
+        }
+      }, 1000);
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+
+      document.querySelectorAll('.bottom-nav button').forEach(button => button.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
     updateUI();
-
-    alert(`✅ Request submitted:\n${pts} points\n${method} to ${number}`);
-    // Here you can send redeem to Firebase or Telegram Bot
-  }
-
-  function saveUsername() {
-    const user = document.getElementById('telegramUser').value.trim();
-    if (user) {
-      localStorage.setItem('tgUser', user);
-      document.getElementById('savedUser').textContent = 'Username: ' + user;
-    }
-  }
-
-  function showTab(tabId) {
-    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-  }
-</script></body>
+  </script>
+</body>
 </html>
