@@ -1,537 +1,167 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABs Reward Hub</title>
+  <title>Reward Hub</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: 'Segoe UI', sans-serif;
-      padding-bottom: 80px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .task-box {
-      background: #1e293b;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .task-box img {
-      width: 60px;
-      margin-bottom: 10px;
-    }
-    .task-box h2 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    .task-box p {
-      color: #22c55e;
-      margin-bottom: 15px;
-    }
-    .btn {
-      background: #3b82f6;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .info {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 15px;
-    }
-    .withdraw-section {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 16px;
-      margin-top: 25px;
-      display: none;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: none;
-      background: #334155;
-      color: white;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #1e293b;<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABs Reward Hub</title>
-  <style>
-    * {
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #fff;
     }
-    body {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: 'Segoe UI', sans-serif;
-      padding-bottom: 80px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .task-box {
-      background: #1e293b;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .task-box img {
-      width: 60px;
-      margin-bottom: 10px;
-    }
-    .task-box h2 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    .task-box p {
-      color: #22c55e;
-      margin-bottom: 15px;
-    }
-    .btn {
-      background: #3b82f6;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABs Reward Hub</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: 'Segoe UI', sans-serif;
-      padding-bottom: 80px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .task-box {
-      background: #1e293b;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .task-box img {
-      width: 60px;
-      margin-bottom: 10px;
-    }
-    .task-box h2 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    .task-box p {
-      color: #22c55e;
-      margin-bottom: 15px;
-    }
-    .btn {
-      background: #3b82f6;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .info {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 15px;
-    }
-    .withdraw-section {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 16px;
-      margin-top: 25px;
-      display: none;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: none;
-      background: #334155;
-      color: white;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #1e293b;<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ABs Reward Hub</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: 'Segoe UI', sans-serif;
-      padding-bottom: 80px;
-    }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .task-box {
-      background: #1e293b;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    .task-box img {
-      width: 60px;
-      margin-bottom: 10px;
-    }
-    .task-box h2 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    .task-box p {
-      color: #22c55e;
-      margin-bottom: 15px;
-    }
-    .btn {
-      background: #3b82f6;
-
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .info {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 15px;
-    }
-    .withdraw-section {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 16px;
-      margin-top: 25px;
-      display: none;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      border: none;
-      background: #334155;
-      color: white;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #1e293b;
-
+    header {
       display: flex;
       justify-content: space-around;
-      align-items: center;
-      height: 60px;
-      border-top: 1px solid #334155;
+      padding: 15px;
+      background: #1e1e1e;
+      box-shadow: 0 0 5px #000;
     }
-    .bottom-nav button {
-      background: none;
+    header button {
+      background: transparent;
       border: none;
-      color: #94a3b8;
-      font-size: 14px;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
     }
-    .bottom-nav .active {
-      color: #3b82f6;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🎁 ABs Reward Hub</h1>
-
-    <div class="task-box">
-      <img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" alt="Ads">
-      <h2>Watch Ads</h2>
-      <p>+5 Points</p>
-      <button class="btn" onclick="watchAd()">Start Task</button>
-    </div>
-
-    <div class="info">
-      Watched: <span id="watched">0</span><br/>
-      Points: <span id="earned">0</span>
-    </div><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ABs Reward Hub</title>
-  <style>
-    body {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding-bottom: 70px;
-    }
-    .container {
-      max-width: 400px;
-      margin: auto;
+    section {
+      display: none;
       padding: 20px;
     }
-    h2 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .section {
-      display: none;
-    }
-    .section.active {
+    section.active {
       display: block;
     }
-    .box {
-      background: #1e293b;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-    }
-    .box button {
-      width: 100%;
-      padding: 12px;
-      background: #3b82f6;
-      color: white;
+    .btn {
+      background: #4caf50;
       border: none;
+      padding: 12px;
       border-radius: 8px;
-      margin-top: 10px;
+      color: white;
       font-size: 16px;
       cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
     }
     input, select {
       width: 100%;
+      margin: 10px 0;
       padding: 10px;
-      margin-top: 10px;
-      border-radius: 8px;
-      background: #334155;
+      border-radius: 5px;
+      border: none;
+      background: #333;
       color: white;
-      border: none;
-    }
-    .info {
-      text-align: center;
-      margin-top: 10px;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: #1e293b;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid #334155;
-    }
-    .bottom-nav button {
-      background: none;
-      border: none;
-      color: #94a3b8;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .bottom-nav .active {
-      color: #3b82f6;
-      font-weight: bold;
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div id="earn" class="section active">
-      <h2>🎥 Watch Ads</h2>
-      <div class="box">
-        <p>Earn 5 Points per Ad</p>
-        <button onclick="watchAd()">▶️ Watch Ad</button>
-        <div class="info">
-          Watched: <span id="watched">0</span><br/>
-          Points: <span id="points">0</span>
-        </div>
-      </div>
-    </div>
+<body><header>
+  <button onclick="showTab('earn')">🏆 Earn</button>
+  <button onclick="showTab('redeem')">💳 Redeem</button>
+  <button onclick="showTab('history')">📜 History</button>
+  <button onclick="showTab('profile')">👤 Profile</button>
+</header><!-- Earn Section --><section id="earn" class="active">
+  <h2>Watch Ads & Earn Points</h2>
+  <p>Watched: <span id="watched">0</span></p>
+  <p>Points: <span id="points">0</span></p>
+  <button class="btn" id="watchAdBtn">▶️ Watch Ad</button>
+  <p id="timer">✅ Ready</p>
+</section><!-- Redeem Section --><section id="redeem">
+  <h2>Redeem Points</h2>
+  <p>500 Points = 50৳ | 1000 Points = 100৳</p>
+  <input type="number" id="redeemPoints" placeholder="Enter points (500 or 1000)" />
+  <select id="redeemMethod">
+    <option value="Bkash">Bkash</option>
+    <option value="Nagad">Nagad</option>
+    <option value="Rocket">Rocket</option>
+  </select>
+  <input type="text" id="redeemNumber" placeholder="Phone Number" />
+  <button class="btn" onclick="submitRedeem()">Submit Request</button>
+</section><!-- History Section --><section id="history">
+  <h2>History</h2>
+  <p>Total Ads Watched: <span id="totalWatched">0</span></p>
+  <p>Total Redeems: <span id="totalRedeems">0</span></p>
+</section><!-- Profile Section --><section id="profile">
+  <h2>Your Profile</h2>
+  <input type="text" id="telegramUser" placeholder="Telegram Username (without @)" />
+  <button class="btn" onclick="saveUsername()">Save</button>
+  <p id="savedUser"></p>
+</section><!-- Ad Script --><script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script><script>
+  let watched = parseInt(localStorage.getItem('watched') || '0');
+  let points = parseInt(localStorage.getItem('points') || '0');
+  let redeems = parseInt(localStorage.getItem('redeems') || '0');
+  let ready = true;
 
-    <div id="redeem" class="section">
-      <h2>🎁 Redeem Points</h2>
-      <div class="box">
-        <select id="redeemMethod">
-          <option value="Bkash">Bkash</option>
-          <option value="Nagad">Nagad</option>
-          <option value="Rocket">Rocket</option>
-        </select>
-        <input type="number" id="redeemAmount" placeholder="Amount (Min 50৳)" />
-        <input type="text" id="redeemNumber" placeholder="Phone Number" />
-        <button onclick="redeemPoints()">Redeem</button>
-      </div>
-    </div>
+  function updateUI() {
+    document.getElementById('watched').textContent = watched;
+    document.getElementById('points').textContent = points;
+    document.getElementById('totalWatched').textContent = watched;
+    document.getElementById('totalRedeems').textContent = redeems;
+    document.getElementById('savedUser').textContent = 'Username: ' + (localStorage.getItem('tgUser') || 'Not set');
+  }
+  updateUI();
 
-    <div id="history" class="section">
-      <h2>📜 History</h2>
-      <div class="box" id="historyBox">
-        No history yet.
-      </div>
-    </div>
-
-    <div id="profile" class="section">
-      <h2>👤 Profile</h2>
-      <div class="box">
-        <input type="text" id="username" placeholder="Your Telegram Username"/>
-        <button onclick="saveUsername()">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <button class="active" onclick="switchTab('earn', this)">Earn</button>
-    <button onclick="switchTab('redeem', this)">Redeem</button>
-    <button onclick="switchTab('history', this)">History</button>
-    <button onclick="switchTab('profile', this)">Profile</button>
-  </div>
-
-  <script>
-    let watched = parseInt(localStorage.getItem('watched')) || 0;
-    let points = parseInt(localStorage.getItem('points')) || 0;
-    let history = JSON.parse(localStorage.getItem('history')) || [];
-    let username = localStorage.getItem('username') || '';
-
-    document.getElementById('watched').innerText = watched;
-    document.getElementById('points').innerText = points;
-    document.getElementById('username').value = username;
-    updateHistory();
-
-    function switchTab(id, el) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
+  document.getElementById('watchAdBtn').addEventListener('click', () => {
+    if (!ready) return;
+    if (typeof show_9547713 === 'function') {
+      show_9547713().then(() => {
+        watched++;
+        points += 5;
+        localStorage.setItem('watched', watched);
+        localStorage.setItem('points', points);
+        updateUI();
+        startTimer();
+      }).catch(() => alert('Ad failed to load'));
     }
+  });
 
-    function watchAd() {
-      watched++;
-      points += 5;
-      localStorage.setItem('watched', watched);
-      localStorage.setItem('points', points);
-      document.getElementById('watched').innerText = watched;
-      document.getElementById('points').innerText = points;
-      history.push(`+5 Points from Ad at ${new Date().toLocaleTimeString()}`);
-      localStorage.setItem('history', JSON.stringify(history));
-      updateHistory();
-      alert('+5 Points Added!');
-    }
-
-    function redeemPoints() {
-      let amount = parseInt(document.getElementById('redeemAmount').value);
-      let method = document.getElementById('redeemMethod').value;
-      let number = document.getElementById('redeemNumber').value.trim();
-
-      if (!amount || amount < 50 || (amount * 10) > points || !number) {
-        alert('Invalid redeem request!');
-        return;
+  function startTimer() {
+    let sec = 10;
+    ready = false;
+    document.getElementById('watchAdBtn').disabled = true;
+    document.getElementById('timer').textContent = `Wait ${sec}s`;
+    let interval = setInterval(() => {
+      sec--;
+      document.getElementById('timer').textContent = `Wait ${sec}s`;
+      if (sec <= 0) {
+        clearInterval(interval);
+        ready = true;
+        document.getElementById('watchAdBtn').disabled = false;
+        document.getElementById('timer').textContent = '✅ Ready';
       }
+    }, 1000);
+  }
 
-      points -= (amount * 10);
-      localStorage.setItem('points', points);
-      document.getElementById('points').innerText = points;
+  function submitRedeem() {
+    const pts = parseInt(document.getElementById('redeemPoints').value);
+    const number = document.getElementById('redeemNumber').value;
+    const method = document.getElementById('redeemMethod').value;
+    const tgUser = localStorage.getItem('tgUser') || '';
 
-      let msg = `Requested ৳${amount} via ${method} to ${number}`;
-      history.push(msg);
-      localStorage.setItem('history', JSON.stringify(history));
-      updateHistory();
-      alert('Redeem Request Submitted!');
+    if (![500, 1000].includes(pts) || points < pts || !number || !tgUser) {
+      alert("Invalid redeem request");
+      return;
     }
 
-    function updateHistory() {
-      const box = document.getElementById('historyBox');
-      if (history.length === 0) {
-        box.innerHTML = 'No history yet.';
-      } else {
-        box.innerHTML = history.map(item => `<p>🕓 ${item}</p>`).join('');
-      }
-    }
+    points -= pts;
+    redeems++;
+    localStorage.setItem('points', points);
+    localStorage.setItem('redeems', redeems);
+    updateUI();
 
-    function saveUsername() {
-      let user = document.getElementById('username').value.trim();
-      if (user) {
-        localStorage.setItem('username', user);
-        alert('Username Saved!');
-      }
+    alert(`✅ Request submitted:\n${pts} points\n${method} to ${number}`);
+    // Here you can send redeem to Firebase or Telegram Bot
+  }
+
+  function saveUsername() {
+    const user = document.getElementById('telegramUser').value.trim();
+    if (user) {
+      localStorage.setItem('tgUser', user);
+      document.getElementById('savedUser').textContent = 'Username: ' + user;
     }
-  </script>
-</body>
+  }
+
+  function showTab(tabId) {
+    document.querySelectorAll('section').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  }
+</script></body>
 </html>
