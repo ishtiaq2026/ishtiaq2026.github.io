@@ -1,194 +1,167 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AdBot Income</title>
+  <title>ABs Reward Hub</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
     body {
-      background: #121212;
-      color: #eee;
-      font-family: Arial, sans-serif;
-      max-width: 420px;
-      margin: 20px auto;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: 'Segoe UI', sans-serif;
+      padding-bottom: 80px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #222;
     }
-    h1, h2 {
+    h1 {
       text-align: center;
+      font-size: 22px;
+      margin-bottom: 10px;
     }
-    button {
-      background: #4caf50;
-      border: none;
-      padding: 12px 20px;
-      margin: 10px auto;
-      display: block;
-      width: 90%;
-      font-size: 18px;
-      border-radius: 8px;
+    .task-box {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+    }
+    .task-box img {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+    .task-box h2 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    .task-box p {
+      color: #22c55e;
+      margin-bottom: 15px;
+    }
+    .btn {
+      background: #3b82f6;
       color: white;
-      cursor: pointer;
-    }
-    input, select {
-      width: 90%;
-      margin: 8px auto;
-      display: block;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 12px 20px;
       border: none;
-      background: #333;
-      color: #eee;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
     }
     .info {
       text-align: center;
-      margin-top: 10px;
+      margin-top: 20px;
+      font-size: 15px;
     }
     .withdraw-section {
-      background: #292929;
+      background: #1e293b;
       padding: 15px;
-      border-radius: 12px;
-      margin-top: 20px;
+      border-radius: 16px;
+      margin-top: 25px;
       display: none;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #334155;
+      color: white;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1e293b;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+      border-top: 1px solid #334155;
+    }
+    .bottom-nav button {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+    .bottom-nav .active {
+      color: #3b82f6;
     }
   </style>
 </head>
 <body>
-  <h1>🎥 Watch Ads & Earn ৳10</h1>
-  <h2>Unlimited | ৳100 Min Withdraw</h2>
-  <div class="info">
-    Watched: <span id="watched">0</span><br />
-    Earned: ৳<span id="earned">0.00</span>
-  </div>
-  <button id="watchAdBtn">▶️ Watch Ad</button>
-  <div class="info" id="timer">✅ Ready</div>
-  <button id="withdrawToggle">Withdraw</button>
-  <div class="withdraw-section" id="withdrawSection">
-    <h3>Withdraw Request</h3>
-    <input type="number" id="withdrawAmount" placeholder="Amount (Min ৳100)" />
-    <select id="withdrawMethod">
-      <option value="Bkash">Bkash</option>
-      <option value="Nagad">Nagad</option>
-    </select>
-    <input type="text" id="withdrawNumber" placeholder="Phone Number" />
-    <input type="text" id="telegramUsername" placeholder="Telegram Username (without @)" />
-    <button id="submitWithdrawBtn">Submit</button>
+  <div class="container">
+    <h1>🎁 ABs Reward Hub</h1>
+
+    <div class="task-box">
+      <img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" alt="Ads">
+      <h2>Watch Ads</h2>
+      <p>+5 Points</p>
+      <button class="btn" onclick="watchAd()">Start Task</button>
+    </div>
+
+    <div class="info">
+      Watched: <span id="watched">0</span><br/>
+      Points: <span id="earned">0</span>
+    </div>
+
+    <button class="btn" style="margin-top:20px;" onclick="toggleWithdraw()">Withdraw</button>
+
+    <div class="withdraw-section" id="withdrawSection">
+      <h3 style="margin-bottom:10px;">Withdraw Request</h3>
+      <select>
+        <option value="Bkash">Bkash</option>
+        <option value="Nagad">Nagad</option>
+        <option value="Rocket">Rocket</option>
+      </select>
+      <input type="number" placeholder="Amount (Min ৳50)" />
+      <input type="text" placeholder="Phone Number" />
+      <input type="text" placeholder="Telegram Username" />
+      <button class="btn" style="margin-top:10px;">Submit</button>
+    </div>
   </div>
 
-  <!-- Ad Script -->
-  <script src="//libtl.com/sdk.js" data-zone="9547713" data-sdk="show_9547713"></script>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <div class="bottom-nav">
+    <button class="active">Earn</button>
+    <button>Redeem</button>
+    <button>History</button>
+    <button>Profile</button>
+  </div>
 
   <script>
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyAE6iHfwdyBHP3O2MtTWRhJU5wpYWbyyNo",
-      authDomain: "usdt-income.firebaseapp.com",
-      databaseURL: "https://usdt-income.firebaseio.com",
-      projectId: "usdt-income",
-      storageBucket: "usdt-income.appspot.com",
-      messagingSenderId: "195634268437",
-      appId: "1:195634268437:web:a8b4a34e968fc484cf011c",
-      measurementId: "G-K8D5HNRQYY"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // Variables
     let watched = parseInt(localStorage.getItem('watched')) || 0;
-    let earned = parseFloat(localStorage.getItem('earned')) || 0.00;
-    let ready = true;
-
-    const watchBtn = document.getElementById('watchAdBtn');
-    const timerEl = document.getElementById('timer');
+    let earned = parseInt(localStorage.getItem('earned')) || 0;
 
     function updateUI() {
-      document.getElementById('watched').textContent = watched;
-      document.getElementById('earned').textContent = earned.toFixed(2);
+      document.getElementById('watched').innerText = watched;
+      document.getElementById('earned').innerText = earned;
+    }
+
+    function watchAd() {
+      watched++;
+      earned += 5;
+      localStorage.setItem('watched', watched);
+      localStorage.setItem('earned', earned);
+      updateUI();
+      alert('+5 Points added!');
+    }
+
+    function toggleWithdraw() {
+      const section = document.getElementById('withdrawSection');
+      section.style.display = section.style.display === 'block' ? 'none' : 'block';
     }
 
     updateUI();
-
-    watchBtn.addEventListener('click', () => {
-      if (!ready) return;
-      if (typeof show_9547713 === 'function') {
-        show_9547713().then(() => {
-          watched++;
-          earned += 10;
-          localStorage.setItem('watched', watched);
-          localStorage.setItem('earned', earned.toFixed(2));
-          updateUI();
-          startTimer();
-          saveUserEarn();
-        }).catch(() => alert('Ad failed to load.'));
-      }
-    });
-
-    function startTimer() {
-      let sec = 10;
-      ready = false;
-      watchBtn.disabled = true;
-      timerEl.textContent = `Wait ${sec}s`;
-      const interval = setInterval(() => {
-        sec--;
-        if (sec <= 0) {
-          clearInterval(interval);
-          ready = true;
-          watchBtn.disabled = false;
-          timerEl.textContent = '✅ Ready';
-        } else {
-          timerEl.textContent = `Wait ${sec}s`;
-        }
-      }, 1000);
-    }
-
-    // Withdraw section toggle
-    document.getElementById('withdrawToggle').addEventListener('click', () => {
-      const section = document.getElementById('withdrawSection');
-      section.style.display = section.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // Withdraw button
-    document.getElementById('submitWithdrawBtn').addEventListener('click', () => {
-      const amount = parseFloat(document.getElementById('withdrawAmount').value);
-      const method = document.getElementById('withdrawMethod').value;
-      const number = document.getElementById('withdrawNumber').value.trim();
-      const username = document.getElementById('telegramUsername').value.trim();
-      if (!amount || amount < 100 || amount > earned || !number || !username) {
-        alert('Invalid withdraw request'); return;
-      }
-      earned -= amount;
-      localStorage.setItem('earned', earned.toFixed(2));
-      updateUI();
-      const data = {
-        amount, method, phone: number, telegramUsername: username,
-        timestamp: new Date().toISOString()
-      };
-      db.ref('withdrawRequests').push(data).then(() => alert('Withdraw request sent!'));
-    });
-
-    function saveUserEarn() {
-      let userId = localStorage.getItem('userId');
-      if (!userId) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const ref = urlParams.get('start');
-        userId = ref ? ref : generateId();
-        localStorage.setItem('userId', userId);
-        if (ref) {
-          db.ref('users/' + ref + '/referralCount').transaction(count => (count || 0) + 1);
-          db.ref('users/' + ref + '/earned').transaction(val => (val || 0) + 10);
-        }
-      }
-      db.ref('users/' + userId).set({ earned, watched, lastUpdated: new Date().toISOString() });
-    }
-
-    function generateId() {
-      return 'user-' + Math.random().toString(36).substring(2, 12);
-    }
   </script>
 </body>
 </html>
