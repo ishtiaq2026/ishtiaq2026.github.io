@@ -139,6 +139,9 @@
           clearI<!DOCTYPE html>
 <html lang="en">
 <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Reward App</title>
@@ -173,6 +176,7 @@
       background-color: #4caf50;
       color: white;
       margin-top: 10px;
+      cursor: pointer;
     }
     .bottom-nav {
       position: fixed;
@@ -213,9 +217,9 @@
     <div id="redeemTab" class="tab-content">
       <h2>🎁 Redeem</h2>
       <p style="text-align:center;">500 Points = ৳50<br>1000 Points = ৳100</p>
-      <button>Withdraw via Bkash</button>
-      <button>Withdraw via Nagad</button>
-      <button>Withdraw via Rocket</button>
+      <button onclick="withdraw('Bkash')">Withdraw via Bkash</button>
+      <button onclick="withdraw('Nagad')">Withdraw via Nagad</button>
+      <button onclick="withdraw('Rocket')">Withdraw via Rocket</button>
     </div>
 
     <!-- History Tab -->
@@ -239,7 +243,7 @@
     <button onclick="switchTab('profileTab', this)">Profile</button>
   </div>
 
-  <!-- Ad Script -->
+  <!-- Ad SDK Script -->
   <script src='//libtl.com/sdk.js' data-zone='9605026' data-sdk='show_9605026'></script>
 
   <script>
@@ -254,15 +258,20 @@
 
     function watchAd() {
       if (!ready) return;
-      if (typeof show_9605026 === 'function') {
-        show_9605026().then(() => {
+
+      if (window.show_9605026 && typeof window.show_9605026 === 'function') {
+        window.show_9605026().then(() => {
           watched++;
           points += 5;
           localStorage.setItem("watched", watched);
           localStorage.setItem("points", points);
           updateUI();
           startTimer();
-        }).catch(() => alert("Ad failed to load."));
+        }).catch(() => {
+          alert("Ad failed to load.");
+        });
+      } else {
+        alert("Ad is not ready yet. Please wait or check your internet.");
       }
     }
 
@@ -287,6 +296,10 @@
 
       document.querySelectorAll('.bottom-nav button').forEach(button => button.classList.remove('active'));
       btn.classList.add('active');
+    }
+
+    function withdraw(method) {
+      alert("Withdraw request via " + method + " submitted!\n(This is a demo. Backend integration required.)");
     }
 
     updateUI();
