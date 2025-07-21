@@ -141,168 +141,178 @@
 <head>
 <!DOCTYPE html>
 <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Reward App</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #121212;
-      font-family: Arial, sans-serif;
-      color: #fff;
-    }
-    .container {
-      padding: 20px;
-      max-width: 420px;
-      margin: auto;
-    }
-    .tab-content {
-      display: none;
-    }
-    .tab-content.active {
-      display: block;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      background-color: #4caf50;
-      color: white;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      max-width: 420px;
-      display: flex;
-      justify-content: space-around;
-      background: #1e1e1e;
-      padding: 8px 0;
-      border-top: 1px solid #333;
-    }
-    .bottom-nav button {
-      background: none;
-      border: none;
-      color: #bbb;
-      font-size: 14px;
-      flex: 1;
-    }
-    .bottom-nav button.active {
-      color: #4caf50;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Watching Mini App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+        h2{
+            font-size: 15px;
+        }
+
+        h1{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(#4caf50 0%, #444 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: auto;
+            transition: background 0.5s ease-in-out;
+        }
+        button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #388e3c;
+        }
+        .hidden {
+            display: none;
+        }
+        .withdraw-section {
+            background: #252525;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Earn Tab -->
-    <div id="earnTab" class="tab-content active">
-      <h1>🎥 Watch Ads & Earn</h1>
-      <h2>+5 Points per Ad</h2>
-      <p style="text-align:center;">Watched: <span id="watched">0</span><br>Points: <span id="points">0</span></p>
-      <button onclick="watchAd()">▶️ Watch Ad</button>
-      <div style="text-align:center;" id="timer">✅ Ready</div>
+    <div class="container">
+        <h1>Ad Watching App</h1>
+        <h2>সর্বনিম্ন উইন্ডো এমাউন্ট ৳500</h2>
+        <div class="progress-circle" id="progress-circle">0%</div>
+        <p>Watched Ads: <span id="watched-ads">0</span></p>
+        <p>Earned Points: ৳<span id="earned-points">0.00</span></p>
+        
+        <button id="watch-ad-btn">Watch Ad</button>
+        <button id="join-btn" >Join Now</button>
+        <button id="withdraw-btn">Withdraw</button>
+
+        <div id="withdraw-section" class="withdraw-section hidden">
+            <h3>Withdraw Funds</h3>
+            <input type="number" id="withdraw-amount" placeholder="Enter Amount" ">
+            <select id="payment-method">
+                <option value="Manual">Manual</option>
+                <option value="Bkash">Bkash</option>
+                <option value="Nagad">Nagad</option>
+            </select>
+            <input type="text" id="phone-number" placeholder="Enter Your Number">
+            <input type="text" id="telegram-username" placeholder="Your Telegram Username">
+            <button id="submit-withdraw">Submit</button>
+        </div>
     </div>
 
-    <!-- Redeem Tab -->
-    <div id="redeemTab" class="tab-content">
-      <h2>🎁 Redeem</h2>
-      <p style="text-align:center;">500 Points = ৳50<br>1000 Points = ৳100</p>
-      <button onclick="withdraw('Bkash')">Withdraw via Bkash</button>
-      <button onclick="withdraw('Nagad')">Withdraw via Nagad</button>
-      <button onclick="withdraw('Rocket')">Withdraw via Rocket</button>
-    </div>
+    <script>
+        let watchedAds = parseInt(localStorage.getItem('watchedAds') || 0);
+        let earnedPoints = parseFloat(localStorage.getItem('earnedPoints') || 0.00);
+        
+        document.getElementById('watched-ads').textContent = watchedAds;
+        document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+        updateProgressBar();
 
-    <!-- History Tab -->
-    <div id="historyTab" class="tab-content">
-      <h2>📜 History</h2>
-      <p style="text-align:center;">No history available</p>
-    </div>
+        document.getElementById('watch-ad-btn').addEventListener('click', watchAd);
+        document.getElementById('withdraw-btn').addEventListener('click', toggleWithdraw);
+        document.getElementById('submit-withdraw').addEventListener('click', withdrawPoints);
+        document.getElementById('join-btn').addEventListener('click', function () {
+                window.location.href = "https://t.me/+ieyJmOyNttQ5ZTRl";
+            });
 
-    <!-- Profile Tab -->
-    <div id="profileTab" class="tab-content">
-      <h2>👤 Profile</h2>
-      <p style="text-align:center;">Username: <strong>@yourname</strong><br>ID: 2970808</p>
-    </div>
-  </div>
 
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <button class="active" onclick="switchTab('earnTab', this)">Earn</button>
-    <button onclick="switchTab('redeemTab', this)">Redeem</button>
-    <button onclick="switchTab('historyTab', this)">History</button>
-    <button onclick="switchTab('profileTab', this)">Profile</button>
-  </div>
-
-  <!-- Ad SDK Script -->
-  <script src='//libtl.com/sdk.js' data-zone='9605026' data-sdk='show_9605026'></script>
-
-  <script>
-    let watched = parseInt(localStorage.getItem('watched')) || 0;
-    let points = parseInt(localStorage.getItem('points')) || 0;
-    let ready = true;
-
-    function updateUI() {
-      document.getElementById("watched").textContent = watched;
-      document.getElementById("points").textContent = points;
-    }
-
-    function watchAd() {
-      if (!ready) return;
-
-      if (window.show_9605026 && typeof window.show_9605026 === 'function') {
-        window.show_9605026().then(() => {
-          watched++;
-          points += 5;
-          localStorage.setItem("watched", watched);
-          localStorage.setItem("points", points);
-          updateUI();
-          startTimer();
-        }).catch(() => {
-          alert("Ad failed to load.");
-        });
-      } else {
-        alert("Ad is not ready yet. Please wait or check your internet.");
-      }
-    }
-
-    function startTimer() {
-      let sec = 10;
-      ready = false;
-      const timerEl = document.getElementById("timer");
-      const interval = setInterval(() => {
-        timerEl.textContent = `Wait ${sec}s`;
-        sec--;
-        if (sec < 0) {
-          clearInterval(interval);
-          timerEl.textContent = "✅ Ready";
-          ready = true;
+        function watchAd() {
+            if (typeof show_2954639 === 'function') {
+                show_2954639().then(() => {
+                    watchedAds++;
+                    earnedPoints += 1;
+                    localStorage.setItem('watchedAds', watchedAds);
+                    localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
+                    document.getElementById('watched-ads').textContent = watchedAds;
+                    document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+                    updateProgressBar();
+                }).catch(err => console.error("Ad failed to load", err));
+            } else {
+                console.warn("Ad function is not available.");
+            }
         }
-      }, 1000);
-    }
 
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
+        function updateProgressBar() {
+            const progress = (watchedAds % 20) * 5;
+            document.getElementById('progress-circle').style.background = `conic-gradient(#4caf50 ${progress}%, #444 ${progress}%)`;
+            document.getElementById('progress-circle').textContent = `${progress}%`;
+        }
 
-      document.querySelectorAll('.bottom-nav button').forEach(button => button.classList.remove('active'));
-      btn.classList.add('active');
-    }
+        function toggleWithdraw() {
+            document.getElementById('withdraw-section').classList.toggle('hidden');
+        }
 
-    function withdraw(method) {
-      alert("Withdraw request via " + method + " submitted!\n(This is a demo. Backend integration required.)");
-    }
+        function withdrawPoints() {
+            const amount = parseFloat(document.getElementById('withdraw-amount').value);
+            const method = document.getElementById('payment-method').value;
+            const phone = document.getElementById('phone-number').value;
 
-    updateUI();
-  </script>
+            if (amount < 500 || amount > earnedPoints) {
+                alert('Invalid withdrawal amount.');
+                return;
+            }
+
+            earnedPoints -= amount;
+            localStorage.setItem('earnedPoints', earnedPoints.toFixed(2));
+            document.getElementById('earned-points').textContent = earnedPoints.toFixed(2);
+
+            const message = `Withdrawal Request:\nAmount: ${amount} BDT\nMethod: ${method}\nPhone: ${phone}`;
+            sendTelegramMessage(message);
+        }
+
+        function sendTelegramMessage(msg) {
+            const botToken = "8087668584:AAFr1OHDOWQgGPUKXVM-St-4FPC_dcMXANw";
+            const chatId = "7315121897";
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`)
+                .then(response => response.json())
+                .then(data => console.log('Message sent to admin'))
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+     <script src='//libtl.com/sdk.js' data-zone='9605026' data-sdk='show_9605026'></script>
 </body>
 </html>
